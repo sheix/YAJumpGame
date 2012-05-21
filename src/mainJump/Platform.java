@@ -15,7 +15,7 @@ public class Platform extends gameObject {
 		x = x1;
 		width = x2-x1;
 		y = height;
-		
+		gravityObject = true;
 		dim = new Dimension(width, 5); 
 		
 	}
@@ -28,8 +28,6 @@ public class Platform extends gameObject {
 	
 	@Override
 	public void OnTimer() {
-		// TODO Auto-generated method stub
-		y++;
 		super.OnTimer();
 	}
 

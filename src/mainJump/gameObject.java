@@ -12,7 +12,7 @@ public abstract class gameObject {
 	int x; 
 	int y;
 	Shape s;
-	
+	boolean gravityObject;
 	
 	abstract public void Draw(Graphics2D g2);
 
@@ -37,7 +37,8 @@ public abstract class gameObject {
 
 
 	public void OnTimer() {
-		// TODO Auto-generated method stub
+		if (gravityObject)
+			y++;
 		
 	}
 

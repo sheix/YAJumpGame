@@ -9,13 +9,15 @@ import java.awt.geom.Ellipse2D;
 public class Player extends gameObject {
 
 	int jumping;
+	int dx = 0;
 	
 	public Player()
 	{
 		x = 100;
 		y = 100;
-		
+		gravityObject = true;
 		jumping = 0;
+		
 		
 		dim = new Dimension(10, 10);
 	}
@@ -40,51 +42,67 @@ public class Player extends gameObject {
 		int key = e.getKeyCode();
 		
 		if (key == KeyEvent.VK_UP) {
-            StartJump();
+            jumping = 0;
         }
 		
 		if (key == KeyEvent.VK_LEFT) {
-            x--;
+            dx = 3;
         }
 		
 		if (key == KeyEvent.VK_RIGHT)
 		{
-			x++;
+			dx = -3;
 		}
 	}
 
-	@Override
+	
 	public void OnTimer() {
-		y++;
+		countJump();
+		countDx();
+		super.OnTimer();
 	};
 	
-	private void StartJump() {
+	private void countDx() {
+		if (dx == 0) return; 
+		if (dx > 0)
+		{
+			dx--;
+			x=x-dx*3;
+		}
+		if (dx<0)
+		{
+			dx++;
+			x=x-dx*3;
+		}
+		
+	}
+
+	private void countJump() {
 		
 		if (jumping == 0)
 		{
-			y = y - 10;
-			jumping = 3;
+			y = y - 20;
+			jumping = 1;
 			return;
 		}
 		
 		if (jumping == 1)
 		{
-			y = y - 5;
-			jumping--;
+			y = y - 10;
+			jumping++;
 			return;
 		}
 		
 		if (jumping == 2)
 		{
-			y = y - 1 ;
-			jumping--;
+			y = y - 5 ;
+			jumping++;
 			return;
 		}
 		
 		if (jumping == 3)
 		{
 			y = y + 1;
-			jumping--;
 			return;
 		}
 	

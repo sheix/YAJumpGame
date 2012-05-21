@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -101,8 +102,12 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 
 	private void BornNewObjects() {
-		// TODO Auto-generated method stub
-		
+		Random r = new Random();
+		if (r.nextInt(25)==0)
+		{
+			Platform p = new Platform(r.nextInt(5)+10, r.nextInt(5)+20, 10);
+			objects.add(p);
+		}
 	}
 
 
