@@ -4,10 +4,10 @@ Started by Anton.Sheihman@gmail.com \\\ www.sheix.info
 
 
 Todo 
-Generate new platform each time
+* Generate new platform each time
 Make intervals between platform creations be greater with time
 Implement touch detection
-Fix jumping engine
+* Fix jumping engine
 Count score
 
 
