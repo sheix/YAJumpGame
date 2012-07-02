@@ -21,13 +21,13 @@ public class VisibleArea extends JPanel implements ActionListener {
 	Timer timer;
 	private ArrayList<gameObject> objects;
 	gameObject player;
-	
+	int score;
 	
 	
 	
 	public VisibleArea()
 	{
-		
+		score = 1;
 		addKeyListener(new TAdapter());
 		
 		setFocusable(true);
@@ -103,9 +103,11 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 	private void BornNewObjects() {
 		Random r = new Random();
-		if (r.nextInt(25)==0)
+		if (r.nextInt(10*(1+(int)(1/Math.log(score))))==0)
 		{
-			Platform p = new Platform(r.nextInt(5)+10, r.nextInt(5)+20, 10);
+			int width = (int)((1/Math.log(score))*(getSize().width))/3;
+			int x = r.nextInt(getSize().width - width);
+			Platform p = new Platform(x, x+width, 10);
 			objects.add(p);
 		}
 	}
@@ -119,8 +121,6 @@ public class VisibleArea extends JPanel implements ActionListener {
 		}
 		
 		objects.removeAll(toDeleteObjects);
-
-		
 	}
 
 
@@ -133,7 +133,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		score++;
 	    BornNewObjects();
 	    MoveAllShapes();
 		repaint();
