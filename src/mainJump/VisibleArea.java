@@ -131,11 +131,27 @@ public class VisibleArea extends JPanel implements ActionListener {
 		
 	}
 	
+	private void SetPlayerOnPlatform()
+	{
+		for (gameObject o : objects)
+			if (o instanceof Platform)
+			{
+				if ((o.y == player.y + player.dim.height) && ((o.x<player.x)&&(o.x + o.dim.width>player.x + player.dim.width)))
+				{
+					((Player)player).onPlatform = true;
+					return;
+				}
+			}
+		((Player)player).onPlatform = false;
+			return;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		score++;
-	    BornNewObjects();
+		BornNewObjects();
 	    MoveAllShapes();
+	    SetPlayerOnPlatform();
 		repaint();
 	}
 	

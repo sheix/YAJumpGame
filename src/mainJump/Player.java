@@ -10,6 +10,7 @@ public class Player extends gameObject {
 
 	int jumping;
 	int dx = 0;
+	public boolean onPlatform;
 	
 	public Player()
 	{
@@ -79,6 +80,11 @@ public class Player extends gameObject {
 
 	private void countJump() {
 		
+		if (onPlatform)
+		{
+			y = y-1;
+		}
+		
 		if (jumping == 0)
 		{
 			y = y - 20;
@@ -100,13 +106,14 @@ public class Player extends gameObject {
 			return;
 		}
 		
-		if (jumping == 3)
+		if (jumping == 3) 
 		{
 			y = y + 1;
 			return;
 		}
-	
 		
+		
+				
 	}
 
 
