@@ -4,11 +4,15 @@ Started by Anton.Sheihman@gmail.com \\\ www.sheix.info
 
 
 Todo 
+Show score
+Resizable window
+
+
 * Generate new platform each time
-Make intervals between platform creations be greater with time
-Implement touch detection
+* Make intervals between platform creations be greater with time
+* Implement touch detection
 * Fix jumping engine
-Count score
+* Count score
 
 
 Possible extensions 
