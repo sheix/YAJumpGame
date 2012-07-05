@@ -15,7 +15,7 @@ public class Player extends gameObject {
 	public Player()
 	{
 		x = 100;
-		y = 100;
+		y = 20;
 		gravityObject = true;
 		jumping = 0;
 		
@@ -85,23 +85,30 @@ public class Player extends gameObject {
 			y = y-1;
 		}
 		
+		
+		if ((jumping == 0) && onPlatform)
+		{
+			y = y - 50;
+			jumping = 1;
+			return;
+		}
+		
 		if (jumping == 0)
 		{
-			y = y - 20;
-			jumping = 1;
+			jumping = 3;
 			return;
 		}
 		
 		if (jumping == 1)
 		{
-			y = y - 10;
+			y = y - 20;
 			jumping++;
 			return;
 		}
 		
 		if (jumping == 2)
 		{
-			y = y - 5 ;
+			y = y - 10 ;
 			jumping++;
 			return;
 		}
