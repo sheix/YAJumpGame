@@ -30,11 +30,7 @@ public class MainLoop extends JFrame{
 	        setResizable(false);
 	       	        
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * @param args
 	 */

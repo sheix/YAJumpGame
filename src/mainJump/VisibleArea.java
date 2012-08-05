@@ -22,10 +22,10 @@ public class VisibleArea extends JPanel implements ActionListener {
 	private ArrayList<gameObject> objects;
 	gameObject player;
 	int score;
-	
-	
-	
-	public VisibleArea()
+    private final PlatformBuilder platformBuilder = new PlatformBuilder(this);
+
+
+    public VisibleArea()
 	{
 		score = 1;
 		addKeyListener(new TAdapter());
@@ -34,13 +34,10 @@ public class VisibleArea extends JPanel implements ActionListener {
 		
 		setDoubleBuffered(true);
 		player = new Player();
-		
-		
+
 		timer = new Timer(25, this);
         timer.start();
-        
-        
-        
+
         objects = new ArrayList<gameObject>();
         objects.add(player);
         
@@ -50,8 +47,16 @@ public class VisibleArea extends JPanel implements ActionListener {
         }
         
 	}
-	
-	private class TAdapter extends KeyAdapter {
+
+    public int getScore() {
+        return score;
+    }
+
+    public ArrayList<gameObject> getObjects() {
+        return objects;
+    }
+
+    private class TAdapter extends KeyAdapter {
 
         public void keyReleased(KeyEvent e) {
             player.keyReleased(e);
@@ -88,9 +93,7 @@ public class VisibleArea extends JPanel implements ActionListener {
       
       Toolkit.getDefaultToolkit().sync();
       g.dispose();
-      
-      
-        }
+       }
 	
 	
     private void MoveAllShapes() {
@@ -103,17 +106,10 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 	private void BornNewObjects() {
 		Random r = new Random();
-		if (r.nextInt(10*(1+(int)(1/Math.log(score))))==0)
-		{
-			int width = (int)((1/Math.log(score))*(getSize().width))/3;
-			int x = r.nextInt(getSize().width - width);
-			Platform p = new Platform(x, x+width, 10);
-			objects.add(p);
-		}
-	}
+        platformBuilder.TryMakePlatform(r);
+    }
 
-
-	private void KillWrongObjects(double w, double h) {
+    private void KillWrongObjects(double w, double h) {
 		ArrayList<gameObject> toDeleteObjects = new ArrayList<gameObject>();
 		for (gameObject o : objects) {
 			if (!o.IsInWindow(w,h))
@@ -121,6 +117,12 @@ public class VisibleArea extends JPanel implements ActionListener {
 		}
 		
 		objects.removeAll(toDeleteObjects);
+
+        if (toDeleteObjects.contains(player))
+        {
+            timer.stop();
+            // game Over
+        }
 	}
 
 
@@ -136,7 +138,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 		for (gameObject o : objects)
 			if (o instanceof Platform)
 			{
-				if ((o.y == player.y + player.dim.height) && ((o.x<player.x)&&(o.x + o.dim.width>player.x + player.dim.width)))
+				if (IsOnSameLevelWithPlayer(o) && IfInsideBoundariesOfThePlatform(o))
 				{
 					((Player)player).onPlatform = true;
 					return;
@@ -145,8 +147,17 @@ public class VisibleArea extends JPanel implements ActionListener {
 		((Player)player).onPlatform = false;
 			return;
 	}
-	
-	@Override
+
+    private boolean IfInsideBoundariesOfThePlatform(gameObject o) {
+        int margin = player.dim.width / 2 - 1;
+        return ((o.x<player.x-margin)&&(o.x + o.dim.width + margin >player.x + player.dim.width));
+    }
+
+    private boolean IsOnSameLevelWithPlayer(gameObject o) {
+        return (o.y == player.y + player.dim.height);
+    }
+
+    @Override
 	public void actionPerformed(ActionEvent e) {
 		score++;
 		BornNewObjects();
