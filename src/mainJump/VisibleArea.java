@@ -35,7 +35,6 @@ public class VisibleArea extends JPanel implements ActionListener {
         objects = new ArrayList<gameObject>();
         objects.add(player);
         objects.add(scoreObject);
-
 	}
 
     public int getScore() {
@@ -104,7 +103,8 @@ public class VisibleArea extends JPanel implements ActionListener {
     private void KillWrongObjects(double w, double h) {
 		ArrayList<gameObject> toDeleteObjects = new ArrayList<gameObject>();
 		for (gameObject o : objects) {
-			if (!o.IsInWindow(w,h))
+            if (!(o instanceof ScoreObject))
+			    if (!o.IsInWindow(w,h)  )
 				toDeleteObjects.add(o);
 		}
 		
