@@ -10,6 +10,14 @@ public class PlatformBuilder implements Serializable {
         this.visibleArea = visibleArea;
     }
 
+    public void MakeInitialPlatforms()
+    {
+        for (int i = 0; i< 10; i++){
+        Platform p = new Platform(i*10 ,visibleArea.getSize().width- i*10, visibleArea.getSize().height - i*10 - dataModel.INSTANCE.getHeightPercent(30));
+        visibleArea.getObjects().add(p);
+        }
+    }
+
     void TryMakePlatform(Random r) {
         if (ShouldMakePlatform(r)) {
             MakePlatform(r);

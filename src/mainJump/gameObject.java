@@ -18,10 +18,8 @@ public abstract class gameObject {
 
 
 	public boolean IsInWindow(double w, double h) {
-		if ((x>0) && (x+dim.width < w) && (y>0) && (y+dim.height < h))
-			return true;
-		return false;
-	}
+        return (x > 0) && (x + dim.width < w) && (y > 0) && (y + dim.height < h);
+    }
 
 
 	public void keyReleased(KeyEvent e) {

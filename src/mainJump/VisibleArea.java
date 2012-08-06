@@ -1,20 +1,14 @@
 package mainJump;
 
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class VisibleArea extends JPanel implements ActionListener {
 
@@ -34,18 +28,14 @@ public class VisibleArea extends JPanel implements ActionListener {
 		
 		setDoubleBuffered(true);
 		player = new Player();
-
+        ScoreObject scoreObject = new ScoreObject();
 		timer = new Timer(25, this);
         timer.start();
 
         objects = new ArrayList<gameObject>();
         objects.add(player);
-        
-        for(int i = 0; i<10;i++)
-        {
-        	objects.add(new Platform(10,100,(i+1) * 10 ));
-        }
-        
+        objects.add(scoreObject);
+
 	}
 
     public int getScore() {
@@ -87,7 +77,7 @@ public class VisibleArea extends JPanel implements ActionListener {
       double h = size.getHeight();
       
       
-      DrawAllShapes(w,h, g2);
+      DrawAllShapes(g2);
       
       KillWrongObjects(w,h);
       
@@ -105,7 +95,9 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 
 	private void BornNewObjects() {
-		Random r = new Random();
+        if (score == 2)
+        platformBuilder.MakeInitialPlatforms();
+        Random r = new Random();
         platformBuilder.TryMakePlatform(r);
     }
 
@@ -126,7 +118,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 	}
 
 
-	private void DrawAllShapes(double w, double h, Graphics2D g2) {
+	private void DrawAllShapes(Graphics2D g2) {
     	for (gameObject o : objects) {
 			o.Draw(g2);
 		}
@@ -145,7 +137,6 @@ public class VisibleArea extends JPanel implements ActionListener {
 				}
 			}
 		((Player)player).onPlatform = false;
-			return;
 	}
 
     private boolean IfInsideBoundariesOfThePlatform(gameObject o) {
