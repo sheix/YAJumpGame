@@ -32,7 +32,7 @@ public class PlatformBuilder implements Serializable {
     }
 
     int SetXPositionForPlatform(Random r, int width) {
-        return r.nextInt(visibleArea.getSize().width - width);
+        return r.nextInt(visibleArea.getSize().width - width + 1);
     }
 
     boolean ShouldMakePlatform(Random r) {

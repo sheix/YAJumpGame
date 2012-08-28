@@ -29,13 +29,15 @@ public class VisibleArea extends JPanel implements ActionListener {
 		setDoubleBuffered(true);
 		player = new Player();
         ScoreObject scoreObject = new ScoreObject();
-		timer = new Timer(25, this);
-        timer.start();
 
         objects = new ArrayList<gameObject>();
         objects.add(player);
         objects.add(scoreObject);
-	}
+
+        timer = new Timer(25, this);
+        timer.setInitialDelay(300);
+        timer.start();
+    }
 
     public int getScore() {
         return score;
@@ -74,15 +76,14 @@ public class VisibleArea extends JPanel implements ActionListener {
       Dimension size = getSize();
       double w = size.getWidth();
       double h = size.getHeight();
-      
-      
+
       DrawAllShapes(g2);
       
       KillWrongObjects(w,h);
       
       Toolkit.getDefaultToolkit().sync();
       g.dispose();
-       }
+    }
 	
 	
     private void MoveAllShapes() {
@@ -95,7 +96,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 	private void BornNewObjects() {
         if (score == 2)
-        platformBuilder.MakeInitialPlatforms();
+            platformBuilder.MakeInitialPlatforms();
         Random r = new Random();
         platformBuilder.TryMakePlatform(r);
     }
@@ -150,7 +151,8 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     @Override
 	public void actionPerformed(ActionEvent e) {
-		score++;
+        score++;
+
 		BornNewObjects();
 	    MoveAllShapes();
 	    SetPlayerOnPlatform();
