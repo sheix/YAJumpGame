@@ -24,4 +24,6 @@ public enum dataModel {
     public Dimension getDimension() {
         return _dim;
     }
+
+    public int score;
 }

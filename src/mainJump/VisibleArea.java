@@ -15,13 +15,13 @@ public class VisibleArea extends JPanel implements ActionListener {
 	Timer timer;
 	private ArrayList<gameObject> objects;
 	gameObject player;
-	int score;
+
     private final PlatformBuilder platformBuilder = new PlatformBuilder(this);
 
 
     public VisibleArea()
 	{
-		score = 1;
+		dataModel.INSTANCE.score = 1;
 		addKeyListener(new TAdapter());
 		
 		setFocusable(true);
@@ -37,10 +37,6 @@ public class VisibleArea extends JPanel implements ActionListener {
         timer = new Timer(25, this);
         timer.setInitialDelay(300);
         timer.start();
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public ArrayList<gameObject> getObjects() {
@@ -95,10 +91,9 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 
 	private void BornNewObjects() {
-        if (score == 2)
+        if (dataModel.INSTANCE.score == 2)
             platformBuilder.MakeInitialPlatforms();
-        Random r = new Random();
-        platformBuilder.TryMakePlatform(r);
+        platformBuilder.TryMakePlatform();
     }
 
     private void KillWrongObjects(double w, double h) {
@@ -142,7 +137,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     private boolean IfInsideBoundariesOfThePlatform(gameObject o) {
         int margin = player.dim.width / 2 - 1;
-        return ((o.x<player.x-margin)&&(o.x + o.dim.width + margin >player.x + player.dim.width));
+        return ((o.x<player.x+margin)&&(o.x + o.dim.width + margin >player.x + player.dim.width));
     }
 
     private boolean IsOnSameLevelWithPlayer(gameObject o) {
@@ -151,7 +146,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     @Override
 	public void actionPerformed(ActionEvent e) {
-        score++;
+        dataModel.INSTANCE.score++;
 
 		BornNewObjects();
 	    MoveAllShapes();
