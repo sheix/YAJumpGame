@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class VisibleArea extends JPanel implements ActionListener {
 
@@ -22,6 +21,7 @@ public class VisibleArea extends JPanel implements ActionListener {
     public VisibleArea()
 	{
 		dataModel.INSTANCE.score = 1;
+        dataModel.INSTANCE.time = 1;
 		addKeyListener(new TAdapter());
 		
 		setFocusable(true);
@@ -34,7 +34,7 @@ public class VisibleArea extends JPanel implements ActionListener {
         objects.add(player);
         objects.add(scoreObject);
 
-        timer = new Timer(25, this);
+        timer = new Timer(35, this);
         timer.setInitialDelay(300);
         timer.start();
     }
@@ -91,7 +91,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 
 
 	private void BornNewObjects() {
-        if (dataModel.INSTANCE.score == 2)
+        if (dataModel.INSTANCE.time == 2)
             platformBuilder.MakeInitialPlatforms();
         platformBuilder.TryMakePlatform();
     }
@@ -99,18 +99,12 @@ public class VisibleArea extends JPanel implements ActionListener {
     private void KillWrongObjects(double w, double h) {
 		ArrayList<gameObject> toDeleteObjects = new ArrayList<gameObject>();
 		for (gameObject o : objects) {
-            if (!(o instanceof ScoreObject))
+            if (!((o instanceof ScoreObject) || (o instanceof Player)))
 			    if (!o.IsInWindow(w,h)  )
 				toDeleteObjects.add(o);
 		}
 		
 		objects.removeAll(toDeleteObjects);
-
-        if (toDeleteObjects.contains(player))
-        {
-            timer.stop();
-            // game Over
-        }
 	}
 
 
@@ -129,6 +123,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 				if (IsOnSameLevelWithPlayer(o) && IfInsideBoundariesOfThePlatform(o))
 				{
 					((Player)player).onPlatform = true;
+                    dataModel.INSTANCE.score++;
 					return;
 				}
 			}
@@ -146,14 +141,19 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     @Override
 	public void actionPerformed(ActionEvent e) {
-        dataModel.INSTANCE.score++;
+        dataModel.INSTANCE.time++;
 
 		BornNewObjects();
 	    MoveAllShapes();
 	    SetPlayerOnPlatform();
+        ValidateGameOver();
 		repaint();
 	}
-	
-	
-	
+
+    private void ValidateGameOver() {
+        if (player.y > dataModel.INSTANCE.getDimension().getHeight()-35)
+            timer.stop();
+    }
+
+
 }

@@ -8,6 +8,7 @@ public class Player extends gameObject {
 
     int jumping;
     int dx = 0;
+    int signx;
     public boolean onPlatform;
 
     public Player() {
@@ -27,22 +28,20 @@ public class Player extends gameObject {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_UP) {
             jumping = 0;
         }
-    }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
-            dx += 1;
+            signx = -1;
+            dx = 1;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-            dx -= 1;
+            signx = 1;
+            dx = 1;
         }
 
     }
@@ -56,15 +55,25 @@ public class Player extends gameObject {
 
     private void countDx() {
         if (dx == 0) return;
-        if (dx > 0) {
-         x = x - dx * 3;
-            dx--;
-        }
-        if (dx < 0) {
-            x = x - dx * 3;
-            dx++;
-        }
+        countSignDx();
 
+    }
+
+    private void countSignDx() {
+        if (dx == 1) {
+            x = (x + signx*5);
+            dx++;
+            return;
+        }
+        if (dx == 2) {
+            x = x + signx*3;
+            dx++;
+            return;
+        }
+        if (dx == 3) {
+            x = x + signx;
+            dx = 0;
+        }
     }
 
     private void countJump() {
@@ -77,6 +86,7 @@ public class Player extends gameObject {
         if ((jumping == 0) && onPlatform) {
             y = y - 50;
             jumping = 1;
+            dataModel.INSTANCE.score += 100;
             return;
         }
 

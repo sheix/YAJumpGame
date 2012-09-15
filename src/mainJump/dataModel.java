@@ -26,4 +26,5 @@ public enum dataModel {
     }
 
     public int score;
+    public int time;
 }

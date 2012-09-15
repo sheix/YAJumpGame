@@ -35,7 +35,7 @@ public class PlatformBuilder implements Serializable {
     }
 
     void MakePlatform(int height) {
-        int width = (int) ((1 / Math.log(dataModel.INSTANCE.score)) * (visibleArea.getSize().width)) / 3;
+        int width = (int) ((1 / Math.log(dataModel.INSTANCE.time)) * (visibleArea.getSize().width)) / 2;
         int x = SetXPositionForPlatform(width);
         Platform p = new Platform(x, x + width, height);
         visibleArea.getObjects().add(p);
@@ -46,6 +46,6 @@ public class PlatformBuilder implements Serializable {
     }
 
     boolean ShouldMakePlatform() {
-        return r.nextInt(10 * (1 + (int) (1 / Math.log(dataModel.INSTANCE.score)))) == 0;
+        return r.nextInt(10 * (1 + (int) (1 / Math.log(dataModel.INSTANCE.time)))) == 0;
     }
 }
