@@ -2,22 +2,8 @@ This is Yet Antother Jump Game
 Started by Anton.Sheihman@gmail.com \\\ www.sheix.info
 
 
-
-Todo 
-Show score
-Resizable window
-
-
-* Generate new platform each time
-* Make intervals between platform creations be greater with time
-* Implement touch detection
-* Fix jumping engine
-* Count score
-
-
 Possible extensions 
 Add bonuses like double jump/extra life/...
-Add score count and display
 Redefinable keys
 Random stuff lying aroung/graffity on the walls/may be from internets ;)
 Multi-Platform
