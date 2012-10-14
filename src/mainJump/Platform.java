@@ -14,7 +14,7 @@ public class Platform extends gameObject {
 		width = x2-x1;
 		y = height;
 		gravityObject = true;
-		dim = new Dimension(width, 5); 
+		dim = new Dimension(width, dataModel.INSTANCE.getHeightPercent(4));
 	}
 	
 	@Override

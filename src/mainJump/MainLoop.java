@@ -14,7 +14,7 @@ public class MainLoop extends JFrame {
         setSize(dataModel.INSTANCE.getDimension());
         setLocationRelativeTo(null);
         setVisible(true);
-        setResizable(false);
+        setResizable(true);
 
     }
 

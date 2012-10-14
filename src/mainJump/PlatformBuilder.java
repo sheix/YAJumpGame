@@ -6,10 +6,11 @@ import java.util.Random;
 public class PlatformBuilder implements Serializable {
     private final VisibleArea visibleArea;
     private Random r;
-    private int defaultHeight = 10;
+    private int defaultHeight;
 
     public PlatformBuilder(VisibleArea visibleArea) {
         this.visibleArea = visibleArea;
+        defaultHeight = dataModel.INSTANCE.getHeightPercent(8);
         r = new Random();
     }
 

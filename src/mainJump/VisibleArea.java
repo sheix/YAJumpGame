@@ -3,10 +3,7 @@ package mainJump;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class VisibleArea extends JPanel implements ActionListener {
@@ -23,8 +20,8 @@ public class VisibleArea extends JPanel implements ActionListener {
 		dataModel.INSTANCE.score = 1;
         dataModel.INSTANCE.time = 1;
 		addKeyListener(new TAdapter());
-		
-		setFocusable(true);
+        this.addComponentListener(new Listener());
+        setFocusable(true);
 		
 		setDoubleBuffered(true);
 		player = new Player();
@@ -86,8 +83,7 @@ public class VisibleArea extends JPanel implements ActionListener {
     	for (gameObject o : objects) {
 			o.OnTimer();
     	}
-		
-	}
+    }
 
 
 	private void BornNewObjects() {
@@ -103,7 +99,6 @@ public class VisibleArea extends JPanel implements ActionListener {
 			    if (!o.IsInWindow(w,h)  )
 				toDeleteObjects.add(o);
 		}
-		
 		objects.removeAll(toDeleteObjects);
 	}
 
@@ -155,5 +150,31 @@ public class VisibleArea extends JPanel implements ActionListener {
             timer.stop();
     }
 
+
+    //onResize
+    public class Listener implements ComponentListener
+    {
+
+        @Override
+        public void componentResized(ComponentEvent componentEvent) {
+            dataModel.INSTANCE.setDimensions(componentEvent.getComponent().getSize());
+            repaint();
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent componentEvent) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void componentShown(ComponentEvent componentEvent) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void componentHidden(ComponentEvent componentEvent) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+    }
 
 }
