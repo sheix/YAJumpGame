@@ -25,6 +25,8 @@ public enum dataModel {
         return _dim;
     }
 
+    public boolean isGameOver;
+
     public int score;
     public int time;
 }

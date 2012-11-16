@@ -11,23 +11,26 @@ public class VisibleArea extends JPanel implements ActionListener {
 	Timer timer;
 	private ArrayList<gameObject> objects;
 	gameObject player;
+    gameObject menu;
 
     private final PlatformBuilder platformBuilder = new PlatformBuilder(this);
-
+    private ArrayList<String> menuItems;
 
     public VisibleArea()
 	{
+        menuItems = new ArrayList<String>();
+        menuItems.add("New Game");
+        menuItems.add("Exit");
 		addKeyListener(new TAdapter());
         this.addComponentListener(new Listener());
         setFocusable(true);
 		setDoubleBuffered(true);
-
+        menu = new MenuObject(menuItems);
         InitializeNewGame();
-
-
     }
 
     private void InitializeNewGame() {
+        dataModel.INSTANCE.isGameOver = false;
         player = new Player();
         ScoreObject scoreObject = new ScoreObject();
         dataModel.INSTANCE.score = 1;
@@ -78,7 +81,7 @@ public class VisibleArea extends JPanel implements ActionListener {
       double w = size.getWidth();
       double h = size.getHeight();
 
-      DrawAllShapes(g2);
+      DrawGameObjects(g2);
       
       KillWrongObjects(w,h);
       
@@ -87,7 +90,7 @@ public class VisibleArea extends JPanel implements ActionListener {
     }
 	
 	
-    private void MoveAllShapes() {
+    private void ActForAllObjects() {
     	for (gameObject o : objects) {
 			o.OnTimer();
     	}
@@ -103,7 +106,7 @@ public class VisibleArea extends JPanel implements ActionListener {
     private void KillWrongObjects(double w, double h) {
 		ArrayList<gameObject> toDeleteObjects = new ArrayList<gameObject>();
 		for (gameObject o : objects) {
-            if (!((o instanceof ScoreObject) || (o instanceof Player)))
+            if (!((o instanceof ScoreObject) || (o instanceof Player)|| o instanceof MenuObject))
 			    if (!o.IsInWindow(w,h)  )
 				toDeleteObjects.add(o);
 		}
@@ -111,11 +114,10 @@ public class VisibleArea extends JPanel implements ActionListener {
 	}
 
 
-	private void DrawAllShapes(Graphics2D g2) {
+	private void DrawGameObjects(Graphics2D g2) {
     	for (gameObject o : objects) {
 			o.Draw(g2);
 		}
-		
 	}
 	
 	private void SetPlayerOnPlatform()
@@ -145,24 +147,37 @@ public class VisibleArea extends JPanel implements ActionListener {
     @Override
 	public void actionPerformed(ActionEvent e) {
         dataModel.INSTANCE.time++;
-
-		BornNewObjects();
-	    MoveAllShapes();
+        BornNewObjects();
+	    ActForAllObjects();
 	    SetPlayerOnPlatform();
         ValidateGameOver();
+        ValidateMenu();
 		repaint();
 	}
 
+    private void ValidateMenu()
+    {
+        if (objects.contains(menu))
+            if (((MenuObject)menu).SelectedIndex == 0)
+                return;
+
+    }
+
     private void ValidateGameOver() {
+        if (!dataModel.INSTANCE.isGameOver)
         if (player.y > dataModel.INSTANCE.getDimension().getHeight()-35)
-            timer.stop();
+        {
+            dataModel.INSTANCE.isGameOver = true;
+            objects.clear();
+            MessageObject m = new MessageObject("Game over!");
+            objects.add(m);
+            objects.add(menu);
+        }
     }
 
 
-    //onResize
     public class Listener implements ComponentListener
     {
-
         @Override
         public void componentResized(ComponentEvent componentEvent) {
             dataModel.INSTANCE.setDimensions(componentEvent.getComponent().getSize());
@@ -171,17 +186,14 @@ public class VisibleArea extends JPanel implements ActionListener {
 
         @Override
         public void componentMoved(ComponentEvent componentEvent) {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
         public void componentShown(ComponentEvent componentEvent) {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
         public void componentHidden(ComponentEvent componentEvent) {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 
