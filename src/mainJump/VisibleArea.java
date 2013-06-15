@@ -17,14 +17,24 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     public VisibleArea()
 	{
-		dataModel.INSTANCE.score = 1;
+        ShowMenu();
+        StartGame();
+    }
+
+    private void ShowMenu()
+    {
+
+    }
+
+    private void StartGame() {
+        dataModel.INSTANCE.score = 1;
         dataModel.INSTANCE.time = 1;
-		addKeyListener(new TAdapter());
+        addKeyListener(new TAdapter());
         this.addComponentListener(new Listener());
         setFocusable(true);
-		
-		setDoubleBuffered(true);
-		player = new Player();
+
+        setDoubleBuffered(true);
+        player = new Player();
         ScoreObject scoreObject = new ScoreObject();
 
         objects = new ArrayList<gameObject>();
