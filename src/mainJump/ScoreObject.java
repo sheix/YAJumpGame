@@ -19,4 +19,10 @@ public class ScoreObject extends gameObject {
         g2.drawString(ca, 25, 25);
 	}
 
+    @Override
+    public boolean IsInWindow(double w, double h)
+    {
+        return true;
+    }
+
 }
