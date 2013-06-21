@@ -27,6 +27,7 @@ public enum dataModel {
 
     public boolean isGameOver;
 
+
     public int score;
     public int time;
 }

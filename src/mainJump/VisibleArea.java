@@ -18,33 +18,37 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     public VisibleArea()
 	{
+        objects = new ArrayList<gameObject>();
         ShowMenu();
         StartGame();
     }
 
     private void ShowMenu()
     {
+        ArrayList<String> items = new ArrayList<String>();
+        items.add("Start Game");
+        items.add("Exit");
+        menu = new MenuObject(items);
+        objects.add(menu);
+        addKeyListener(new TMenuAdapter());
 
     }
 
     private void StartGame() {
         dataModel.INSTANCE.score = 1;
         dataModel.INSTANCE.time = 1;
-        addKeyListener(new TAdapter());
-        this.addComponentListener(new Listener());
         setFocusable(true);
-
         setDoubleBuffered(true);
-        player = new Player();
-        ScoreObject scoreObject = new ScoreObject();
+    }
 
     private void InitializeNewGame() {
+        addKeyListener(new TAdapter());
+        this.addComponentListener(new Listener());
         dataModel.INSTANCE.isGameOver = false;
         player = new Player();
         ScoreObject scoreObject = new ScoreObject();
         dataModel.INSTANCE.score = 1;
         dataModel.INSTANCE.time = 1;
-        objects = new ArrayList<gameObject>();
         objects.add(player);
         objects.add(scoreObject);
         InitializeTimer();
@@ -60,6 +64,15 @@ public class VisibleArea extends JPanel implements ActionListener {
         return objects;
     }
 
+    private class TMenuAdapter extends KeyAdapter{
+        public void keyReleased(KeyEvent e) {
+            menu.keyReleased(e);
+        }
+
+        public void keyPressed(KeyEvent e) {
+            menu.keyPressed(e);
+        }
+    }
     private class TAdapter extends KeyAdapter {
 
         public void keyReleased(KeyEvent e) {

@@ -14,11 +14,16 @@ public class MenuObject extends gameObject {
     {
         SelectedIndex = 0;
         isSelected = false;
-        x = 10; y= 10; dim = new Dimension(10,10);
+        x = 10; y = 10; dim = new Dimension(10,10);
         items = _items;
     }
     @Override
     public void Draw(Graphics2D g2) {
+        for (int i = 0; i< items.size();i++)
+        {
+            if (SelectedIndex == i)  g2.drawString(">>", 40, y + i*12);
+            g2.drawString((String)(items.toArray()[i]), 54, y + i*12);
+        }
     }
 
     public void keyPressed(KeyEvent e) {
