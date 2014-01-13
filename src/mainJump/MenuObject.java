@@ -22,11 +22,11 @@ public class MenuObject extends gameObject {
         for (int i = 0; i< items.size();i++)
         {
             if (SelectedIndex == i)  g2.drawString(">>", 40, y + i*12);
-            g2.drawString((String)(items.toArray()[i]), 54, y + i*12);
+            g2.drawString((String)(items.toArray()[i]), 70, y + i*12);
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_ENTER) {
             isSelected = true;

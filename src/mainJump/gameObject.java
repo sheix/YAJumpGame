@@ -36,7 +36,10 @@ public abstract class gameObject {
 
 	public void OnTimer() {
 		if (gravityObject)
+        {
 			y++;
+            y--;
+        }
 		
 	}
 
@@ -44,3 +47,4 @@ public abstract class gameObject {
 
 	
 }
+

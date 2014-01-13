@@ -21,9 +21,7 @@ public class Player extends gameObject {
 
     @Override
     public void Draw(Graphics2D g2) {
-
         s = new Ellipse2D.Double(x, y, dim.getWidth(), dim.getHeight());
-
         g2.draw(s);
     }
 
@@ -44,6 +42,20 @@ public class Player extends gameObject {
             dx = 1;
         }
 
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) {
+            signx = -1;
+            dx = 1;
+        }
+
+        if (key == KeyEvent.VK_RIGHT) {
+            signx = 1;
+            dx = 1;
+        }
     }
 
 
@@ -81,7 +93,6 @@ public class Player extends gameObject {
         if (onPlatform) {
             y = y - 1;
         }
-
 
         if ((jumping == 0) && onPlatform) {
             y = y - 50;

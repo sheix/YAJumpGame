@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
 
 public class VisibleArea extends JPanel implements ActionListener {
 
@@ -12,12 +13,14 @@ public class VisibleArea extends JPanel implements ActionListener {
 	private ArrayList<gameObject> objects;
 	gameObject player;
     gameObject menu;
+    Graphics2D g2;
+    double w,h;
 
-    private final PlatformBuilder platformBuilder = new PlatformBuilder(this);
-    private ArrayList<String> menuItems;
+    private final PlatformBuilder platformBuilder;
 
     public VisibleArea()
 	{
+        platformBuilder = new PlatformBuilder(this);
         objects = new ArrayList<gameObject>();
         ShowMenu();
         StartGame();
@@ -31,7 +34,7 @@ public class VisibleArea extends JPanel implements ActionListener {
         menu = new MenuObject(items);
         objects.add(menu);
         addKeyListener(new TMenuAdapter());
-
+        InitializeTimer();
     }
 
     private void StartGame() {
@@ -49,6 +52,7 @@ public class VisibleArea extends JPanel implements ActionListener {
         ScoreObject scoreObject = new ScoreObject();
         dataModel.INSTANCE.score = 1;
         dataModel.INSTANCE.time = 1;
+        objects = new ArrayList<gameObject>();
         objects.add(player);
         objects.add(scoreObject);
         InitializeTimer();
@@ -87,26 +91,20 @@ public class VisibleArea extends JPanel implements ActionListener {
 	public void paint(Graphics g)
     {
       super.paint(g);
-
-      Graphics2D g2 = (Graphics2D) g;
-
+      g2 = (Graphics2D) g;
       RenderingHints rh =
             new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                              RenderingHints.VALUE_ANTIALIAS_ON);
-
       rh.put(RenderingHints.KEY_RENDERING,
              RenderingHints.VALUE_RENDER_QUALITY);
-
       g2.setRenderingHints(rh);
 
       Dimension size = getSize();
-      double w = size.getWidth();
-      double h = size.getHeight();
+      w = size.getWidth();
+      h = size.getHeight();
 
       DrawGameObjects(g2);
-      
-      KillWrongObjects(w,h);
-      
+
       Toolkit.getDefaultToolkit().sync();
       g.dispose();
     }
@@ -126,13 +124,14 @@ public class VisibleArea extends JPanel implements ActionListener {
     }
 
     private void KillWrongObjects(double w, double h) {
-		ArrayList<gameObject> toDeleteObjects = new ArrayList<gameObject>();
+		ArrayList<gameObject> newObjects = new ArrayList<gameObject>();
 		for (gameObject o : objects) {
             if (!((o instanceof ScoreObject) || (o instanceof Player)|| o instanceof MenuObject))
-			    if (!o.IsInWindow(w,h)  )
-				toDeleteObjects.add(o);
+			    if (!o.IsInWindow(w,h))
+				continue;
+            newObjects.add(o);
 		}
-		objects.removeAll(toDeleteObjects);
+		objects = newObjects;
 	}
 
 
@@ -168,19 +167,33 @@ public class VisibleArea extends JPanel implements ActionListener {
 
     @Override
 	public void actionPerformed(ActionEvent e) {
-        dataModel.INSTANCE.time++;
-        BornNewObjects();
-	    ActForAllObjects();
-	    SetPlayerOnPlatform();
-        ValidateGameOver();
-        ValidateMenu();
+        if (IsMenuOn())
+            ValidateMenu();
+        else
+        {
+            dataModel.INSTANCE.time++;
+            BornNewObjects();
+            KillWrongObjects(w, h);
+	        ActForAllObjects();
+	        SetPlayerOnPlatform();
+            ValidateGameOver();
+        }
 		repaint();
 	}
 
+    private boolean IsMenuOn()
+    {
+        return objects.contains(menu);
+    }
+
     private void ValidateMenu()
     {
-        if (objects.contains(menu))
-            if (((MenuObject)menu).SelectedIndex == 0)
+        if (IsMenuOn())
+            if (((MenuObject)menu).isSelected)
+            {
+               if (((MenuObject)menu).SelectedIndex == 0)
+                   InitializeNewGame();
+            }
                 return;
 
     }
