@@ -111,9 +111,21 @@ public class VisibleArea extends JPanel implements ActionListener {
 	
 	
     private void ActForAllObjects() {
+        boolean setPlayer = false;
     	for (gameObject o : objects) {
 			o.OnTimer();
+            if (o instanceof Platform)
+            {
+                if (IsOnSameLevelWithPlayer(o) && IfInsideBoundariesOfThePlatform(o))
+                {
+                    ((Player)player).onPlatform = true;
+                    setPlayer = true;
+                    dataModel.INSTANCE.score++;
+                }
+            }
     	}
+        if (!setPlayer)
+            ((Player)player).onPlatform = false;
     }
 
 
@@ -141,22 +153,7 @@ public class VisibleArea extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void SetPlayerOnPlatform()
-	{
-		for (gameObject o : objects)
-			if (o instanceof Platform)
-			{
-				if (IsOnSameLevelWithPlayer(o) && IfInsideBoundariesOfThePlatform(o))
-				{
-					((Player)player).onPlatform = true;
-                    dataModel.INSTANCE.score++;
-					return;
-				}
-			}
-		((Player)player).onPlatform = false;
-	}
-
-    private boolean IfInsideBoundariesOfThePlatform(gameObject o) {
+	private boolean IfInsideBoundariesOfThePlatform(gameObject o) {
         int margin = player.dim.width / 2 - 1;
         return ((o.x<player.x+margin)&&(o.x + o.dim.width + margin >player.x + player.dim.width));
     }
@@ -175,8 +172,7 @@ public class VisibleArea extends JPanel implements ActionListener {
             BornNewObjects();
             KillWrongObjects(w, h);
 	        ActForAllObjects();
-	        SetPlayerOnPlatform();
-            ValidateGameOver();
+	        ValidateGameOver();
         }
 		repaint();
 	}
